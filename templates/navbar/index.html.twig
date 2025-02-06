@@ -1,0 +1,18 @@
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="{{ path('app_landing') }}" class="navbar-logo">Tournois</a>
+        <ul class="navbar-menu">
+            {% if app.user %}
+                <li><a href="{{ path('app_dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ path('app_team_list') }}">Team</a></li>
+                <li><a href="{{ path('app_profile') }}">Profil</a></li>
+                {% if is_granted('ROLE_ADMIN') %}
+                {% endif %}
+                <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
+            {% else %}
+                <li><a href="{{ path('app_login') }}">Connexion</a></li>
+                <li><a href="{{ path('app_register') }}">Inscription</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

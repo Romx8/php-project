@@ -55,11 +55,16 @@ class Tournament
     #[ORM\ManyToOne(inversedBy: 'Tournament')]
     private ?Encounter $EcounterId = null;
 
+    // Propriété non persistée pour indiquer si l'utilisateur participe
+    private bool $userIsParticipant = false;
+
     public function __construct()
     {
         $this->Team = new ArrayCollection();
         $this->winer = new ArrayCollection();
     }
+
+    // --- Getters et setters pour les propriétés persistées ---
 
     public function getId(): ?int
     {
@@ -74,7 +79,6 @@ class Tournament
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -86,7 +90,6 @@ class Tournament
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -98,7 +101,6 @@ class Tournament
     public function setCashprice(int $cashprice): static
     {
         $this->cashprice = $cashprice;
-
         return $this;
     }
 
@@ -110,7 +112,6 @@ class Tournament
     public function setNbMaxTeam(int $nbMaxTeam): static
     {
         $this->nbMaxTeam = $nbMaxTeam;
-
         return $this;
     }
 
@@ -122,7 +123,6 @@ class Tournament
     public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
-
         return $this;
     }
 
@@ -134,7 +134,6 @@ class Tournament
     public function setFinished(bool $finished): static
     {
         $this->finished = $finished;
-
         return $this;
     }
 
@@ -146,7 +145,6 @@ class Tournament
     public function setStartInscription(\DateTimeInterface $start_inscription): static
     {
         $this->start_inscription = $start_inscription;
-
         return $this;
     }
 
@@ -158,7 +156,6 @@ class Tournament
     public function setEndInscription(\DateTimeInterface $end_inscription): static
     {
         $this->end_inscription = $end_inscription;
-
         return $this;
     }
 
@@ -175,14 +172,12 @@ class Tournament
         if (!$this->Team->contains($team)) {
             $this->Team->add($team);
         }
-
         return $this;
     }
 
     public function removeTeam(Team $team): static
     {
         $this->Team->removeElement($team);
-
         return $this;
     }
 
@@ -200,19 +195,16 @@ class Tournament
             $this->winer->add($winer);
             $winer->setTournamentWinId($this);
         }
-
         return $this;
     }
 
     public function removeWiner(Team $winer): static
     {
         if ($this->winer->removeElement($winer)) {
-            // set the owning side to null (unless already changed)
             if ($winer->getTournamentWinId() === $this) {
                 $winer->setTournamentWinId(null);
             }
         }
-
         return $this;
     }
 
@@ -224,7 +216,19 @@ class Tournament
     public function setEcounterId(?Encounter $EcounterId): static
     {
         $this->EcounterId = $EcounterId;
+        return $this;
+    }
 
+    // --- Propriété non persistée : userIsParticipant ---
+
+    public function getUserIsParticipant(): bool
+    {
+        return $this->userIsParticipant;
+    }
+
+    public function setUserIsParticipant(bool $userIsParticipant): self
+    {
+        $this->userIsParticipant = $userIsParticipant;
         return $this;
     }
 }
