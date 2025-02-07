@@ -1,6 +1,8 @@
 <nav class="navbar">
     <div class="navbar-container">
-        <a href="{{ path('app_landing') }}" class="navbar-logo">Tournois</a>
+        <a href="{{ path('app_landing') }}" class="navbar-logo">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="landing-logo">
+        </a>
         <ul class="navbar-menu">
             {% if app.user %}
                 <li><a href="{{ path('app_dashboard') }}">Dashboard</a></li>
