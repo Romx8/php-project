@@ -49,7 +49,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     // Redirection après une connexion réussie, par exemple vers la page d'accueil
-    return new RedirectResponse($this->urlGenerator->generate('landing'));
+    return new RedirectResponse($this->urlGenerator->generate('app_landing'));
 }
 
 
