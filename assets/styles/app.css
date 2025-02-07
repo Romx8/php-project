@@ -608,3 +608,39 @@ form p a:hover {
     /* Optionnel : ajouter un fond léger pour marquer visuellement */
     background-color: #eaffea;
 }
+
+/* Tournament Progress Page */
+
+.tournament-progress-container {
+    text-align: center;
+    padding: 20px;
+}
+.bracket {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.match {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+.team {
+    padding: 8px;
+    margin: 5px;
+    width: 120px;
+    text-align: center;
+    background: #ddd;
+    border-radius: 5px;
+}
+.winner {
+    background: #28a745;
+    color: white;
+    font-weight: bold;
+}

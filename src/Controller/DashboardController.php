@@ -22,7 +22,7 @@ class DashboardController extends AbstractController
             foreach ($tournaments as $tournament) {
                 $userIsParticipant = false;
                 foreach ($user->getTeamId() as $userTeam) {
-                    if ($tournament->getTeam()->contains($userTeam)) {
+                    if ($tournament->getTeams()->contains($userTeam)) {
                         $userIsParticipant = true;
                         break;
                     }

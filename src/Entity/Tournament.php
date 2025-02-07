@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[ORM\Entity(repositoryClass: TournamentRepository::class)]
 class Tournament
@@ -32,7 +33,7 @@ class Tournament
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column]
-    private ?bool $finished = null;
+    private ?bool $finished = false;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $start_inscription = null;
@@ -40,31 +41,24 @@ class Tournament
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $end_inscription = null;
 
-    /**
-     * @var Collection<int, Team>
-     */
     #[ORM\ManyToMany(targetEntity: Team::class, inversedBy: 'TournamentId')]
-    private Collection $Team;
+    private Collection $teams;
 
-    /**
-     * @var Collection<int, Team>
-     */
-    #[ORM\OneToMany(targetEntity: Team::class, mappedBy: 'TournamentWinId')]
-    private Collection $winer;
+    #[ORM\OneToMany(targetEntity: Encounter::class, mappedBy: 'tournament', cascade: ['remove'])]
+    private Collection $encounters;
 
-    #[ORM\ManyToOne(inversedBy: 'Tournament')]
-    private ?Encounter $EcounterId = null;
+    #[ORM\ManyToOne(targetEntity: Team::class)]
+    private ?Team $winner = null;
 
-    // Propriété non persistée pour indiquer si l'utilisateur participe
     private bool $userIsParticipant = false;
 
     public function __construct()
     {
-        $this->Team = new ArrayCollection();
-        $this->winer = new ArrayCollection();
+        $this->teams = new ArrayCollection();
+        $this->encounters = new ArrayCollection();
     }
 
-    // --- Getters et setters pour les propriétés persistées ---
+    // --- Getters & Setters ---
 
     public function getId(): ?int
     {
@@ -159,68 +153,60 @@ class Tournament
         return $this;
     }
 
-    /**
-     * @return Collection<int, Team>
-     */
-    public function getTeam(): Collection
+    // Gestion des équipes inscrites
+    public function getTeams(): Collection
     {
-        return $this->Team;
+        return $this->teams;
     }
 
     public function addTeam(Team $team): static
     {
-        if (!$this->Team->contains($team)) {
-            $this->Team->add($team);
+        if (!$this->teams->contains($team)) {
+            $this->teams->add($team);
         }
         return $this;
     }
 
     public function removeTeam(Team $team): static
     {
-        $this->Team->removeElement($team);
+        $this->teams->removeElement($team);
         return $this;
     }
 
-    /**
-     * @return Collection<int, Team>
-     */
-    public function getWiner(): Collection
+    // Gestion des matchs (Encounters)
+    public function getEncounters(): Collection
     {
-        return $this->winer;
+        return $this->encounters;
     }
 
-    public function addWiner(Team $winer): static
+    public function addEncounter(Encounter $encounter): static
     {
-        if (!$this->winer->contains($winer)) {
-            $this->winer->add($winer);
-            $winer->setTournamentWinId($this);
+        if (!$this->encounters->contains($encounter)) {
+            $this->encounters->add($encounter);
+            $encounter->setTournament($this);
         }
         return $this;
     }
 
-    public function removeWiner(Team $winer): static
+    public function removeEncounter(Encounter $encounter): static
     {
-        if ($this->winer->removeElement($winer)) {
-            if ($winer->getTournamentWinId() === $this) {
-                $winer->setTournamentWinId(null);
-            }
-        }
+        $this->encounters->removeElement($encounter);
         return $this;
     }
 
-    public function getEcounterId(): ?Encounter
+    // Gagnant du tournoi
+    public function getWinner(): ?Team
     {
-        return $this->EcounterId;
+        return $this->winner;
     }
 
-    public function setEcounterId(?Encounter $EcounterId): static
+    public function setWinner(?Team $winner): static
     {
-        $this->EcounterId = $EcounterId;
+        $this->winner = $winner;
         return $this;
     }
 
-    // --- Propriété non persistée : userIsParticipant ---
-
+    // Gestion des participants
     public function getUserIsParticipant(): bool
     {
         return $this->userIsParticipant;
@@ -231,4 +217,69 @@ class Tournament
         $this->userIsParticipant = $userIsParticipant;
         return $this;
     }
+
+    // --- Logique des matchs ---
+
+    public function generateEncounters(EntityManagerInterface $em)
+    {
+        $teams = $this->getTeams()->toArray();
+        shuffle($teams); // Mélanger aléatoirement les équipes
+
+        $matchCount = floor(count($teams) / 2); // Nombre de matchs (paire d’équipes)
+
+        for ($i = 0; $i < $matchCount; $i++) {
+            $match = new Encounter();
+            $match->setTournament($this);
+            $match->setTeam1($teams[$i * 2]);
+            $match->setTeam2($teams[$i * 2 + 1]);
+
+            $em->persist($match);
+        }
+
+        $em->flush();
+    }
+
+    public function advancePhase(EntityManagerInterface $em)
+{
+    $matches = $this->getEncounters()->toArray(); // Récupère tous les matchs du tournoi
+
+    if (count($matches) == 1) {
+        // 🏆 Dernier match, définir le gagnant du tournoi
+        $finalMatch = $matches[0];
+        $winner = rand(0, 1) ? $finalMatch->getTeam1() : $finalMatch->getTeam2();
+        $this->setWinner($winner);
+        $this->setFinished(true);
+    } else {
+        $newMatches = [];
+        shuffle($matches); // Mélange les matchs pour rendre aléatoire
+
+        for ($i = 0; $i < count($matches); $i += 2) {
+            if (!isset($matches[$i + 1])) break; // Éviter les erreurs s'il reste un match impair
+
+            $match1 = $matches[$i];
+            $match2 = $matches[$i + 1];
+
+            // Sélectionner un gagnant aléatoire pour chaque match
+            $winner1 = rand(0, 1) ? $match1->getTeam1() : $match1->getTeam2();
+            $winner2 = rand(0, 1) ? $match2->getTeam1() : $match2->getTeam2();
+
+            // Créer un nouveau match avec les gagnants
+            $newMatch = new Encounter();
+            $newMatch->setTournament($this);
+            $newMatch->setTeam1($winner1);
+            $newMatch->setTeam2($winner2);
+
+            $em->persist($newMatch);
+            $newMatches[] = $newMatch;
+        }
+
+        // Supprimer les anciens matchs terminés
+        foreach ($matches as $match) {
+            $em->remove($match);
+        }
+    }
+
+    $em->flush();
+}
+
 }

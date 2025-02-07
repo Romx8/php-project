@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Avancement du Tournoi : {{ tournament.name }}{% endblock %}
+
+{% block body %}
+<div class="tournament-progress-container">
+    <h1>Avancement du Tournoi : {{ tournament.name }}</h1>
+
+    <div class="bracket">
+        {% for encounter in tree %}
+            <div class="match">
+                <div class="team {% if encounter.winner == encounter.team1 %}winner{% endif %}">
+                    {{ encounter.team1 }}
+                </div>
+                <div class="team {% if encounter.winner == encounter.team2 %}winner{% endif %}">
+                    {{ encounter.team2 }}
+                </div>
+            </div>
+        {% endfor %}
+
+        {% if not tournament.finished %}
+            <a href="{{ path('app_tournament_advance', {'id': tournament.id}) }}" class="btn btn-danger">
+                Finir la phase
+            </a>
+        {% else %}
+        {% if tournament.winner %}
+            <p>🏆 Le tournoi est terminé ! Gagnant : {{ tournament.winner.name }}</p>
+        {% else %}
+            <p>🏆 Le tournoi est terminé, mais aucun gagnant n'a été défini.</p>
+        {% endif %}
+    
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

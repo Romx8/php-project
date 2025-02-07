@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\EncounterRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EncounterRepository::class)]
@@ -15,95 +13,120 @@ class Encounter
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?bool $result = null;
+    #[ORM\ManyToOne(targetEntity: Team::class)]
+    private ?Team $team1 = null;
 
-    /**
-     * @var Collection<int, Tournament>
-     */
-    #[ORM\OneToMany(targetEntity: Tournament::class, mappedBy: 'EcounterId')]
-    private Collection $Tournament;
+    #[ORM\ManyToOne(targetEntity: Team::class)]
+    private ?Team $team2 = null;
 
-    /**
-     * @var Collection<int, Team>
-     */
-    #[ORM\ManyToMany(targetEntity: Team::class, inversedBy: 'EncounterId')]
-    private Collection $Team;
+    #[ORM\ManyToOne(targetEntity: Team::class)]
+    private ?Team $winner = null;
 
-    public function __construct()
-    {
-        $this->Tournament = new ArrayCollection();
-        $this->Team = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(targetEntity: Tournament::class, inversedBy: 'encounters')]
+    private ?Tournament $tournament = null;
+
+    #[ORM\ManyToOne(targetEntity: Encounter::class)]
+    private ?Encounter $nextEncounter = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function isResult(): ?bool
+    public function getTeam1(): ?Team
     {
-        return $this->result;
+        return $this->team1;
     }
 
-    public function setResult(bool $result): static
+    public function setTeam1(?Team $team1): static
     {
-        $this->result = $result;
-
+        $this->team1 = $team1;
         return $this;
     }
 
-    /**
-     * @return Collection<int, Tournament>
-     */
-    public function getTournament(): Collection
+    public function getTeam2(): ?Team
     {
-        return $this->Tournament;
+        return $this->team2;
     }
 
-    public function addTournament(Tournament $tournament): static
+    public function setTeam2(?Team $team2): static
     {
-        if (!$this->Tournament->contains($tournament)) {
-            $this->Tournament->add($tournament);
-            $tournament->setEcounterId($this);
+        $this->team2 = $team2;
+        return $this;
+    }
+
+    public function getWinner(): ?Team
+    {
+        return $this->winner;
+    }
+
+    public function setWinner(?Team $winner): static
+    {
+        $this->winner = $winner;
+        return $this;
+    }
+
+    public function getTournament(): ?Tournament
+    {
+        return $this->tournament;
+    }
+
+    public function setTournament(?Tournament $tournament): static
+    {
+        $this->tournament = $tournament;
+        return $this;
+    }
+
+    public function getNextEncounter(): ?Encounter
+    {
+        return $this->nextEncounter;
+    }
+
+    public function setNextEncounter(?Encounter $nextEncounter): static
+    {
+        $this->nextEncounter = $nextEncounter;
+        return $this;
+    }
+
+    // ✅ Ajouter une méthode pour récupérer les équipes participantes
+    public function getTeams(): array
+    {
+        return array_filter([$this->team1, $this->team2]);
+    }
+
+    // ✅ Ajouter une équipe à la rencontre
+    public function addTeam(Team $team): void
+    {
+        if (!$this->team1) {
+            $this->team1 = $team;
+        } elseif (!$this->team2) {
+            $this->team2 = $team;
+        } else {
+            throw new \Exception("Cette rencontre a déjà deux équipes.");
         }
-
-        return $this;
     }
 
-    public function removeTournament(Tournament $tournament): static
+    // ✅ Supprimer une équipe de la rencontre
+    public function removeTeam(Team $team): void
     {
-        if ($this->Tournament->removeElement($tournament)) {
-            // set the owning side to null (unless already changed)
-            if ($tournament->getEcounterId() === $this) {
-                $tournament->setEcounterId(null);
-            }
+        if ($this->team1 === $team) {
+            $this->team1 = null;
+        } elseif ($this->team2 === $team) {
+            $this->team2 = null;
         }
-
-        return $this;
     }
 
-    /**
-     * @return Collection<int, Team>
-     */
-    public function getTeam(): Collection
+    // ✅ Vérifier si un match est terminé (si un gagnant est défini)
+    public function isFinished(): bool
     {
-        return $this->Team;
+        return $this->winner !== null;
     }
 
-    public function addTeam(Team $team): static
+    // ✅ Déterminer aléatoirement un gagnant et avancer la compétition
+    public function determineWinner(): void
     {
-        if (!$this->Team->contains($team)) {
-            $this->Team->add($team);
+        if ($this->team1 && $this->team2) {
+            $this->winner = rand(0, 1) ? $this->team1 : $this->team2;
         }
-
-        return $this;
-    }
-
-    public function removeTeam(Team $team): static
-    {
-        $this->Team->removeElement($team);
-
-        return $this;
     }
 }

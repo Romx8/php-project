@@ -25,11 +25,15 @@
     </ul>
 
     <h2>Équipes inscrites</h2>
-    {% if tournament.Team|length == 0 %}
+    {% if tournament.teams|length == 0 %}
          <p>Aucune équipe inscrite pour le moment.</p>
     {% else %}
+    {% if tournament.teams|length > 1 %}
+        <a href="{{ path('app_generate_matches', {'id': tournament.id}) }}" class="btn btn-primary">Générer les matchs</a>
+    {% endif %}
+
          <ul class="teams-list">
-             {% for team in tournament.Team %}
+             {% for team in tournament.teams %}
                  <li>{{ team.name }}</li>
              {% endfor %}
          </ul>
@@ -47,8 +51,11 @@
     {% endif %}
 
     {# Bouton "Voir l'arborescence" : s'affiche si le tournoi est en cours et l'utilisateur est déjà inscrit #}
-    {% if not tournament.finished and tournament.userIsParticipant %}
-         <a href="{{ path('app_tournament_progress', {'id': tournament.id}) }}" class="btn-progress">Voir l'arborescence</a>
-    {% endif %}
+    {% if tournament.finished == false %}
+    <a href="{{ path('app_tournament_progress', {'id': tournament.id}) }}" class="btn btn-success">
+        Voir l'avancement du tournoi
+    </a>
+{% endif %}
+
 </div>
 {% endblock %}
