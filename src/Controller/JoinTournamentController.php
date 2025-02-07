@@ -46,7 +46,7 @@ class JoinTournamentController extends AbstractController
         // Sélectionner une équipe non encore inscrite dans ce tournoi
         $selectedTeam = null;
         foreach ($teams as $team) {
-            if (!$tournament->getTeam()->contains($team)) {
+            if (!$tournament->getTeams()->contains($team)) {
                 $selectedTeam = $team;
                 break;
             }
@@ -58,7 +58,7 @@ class JoinTournamentController extends AbstractController
         }
         
         // Vérifier que le tournoi n'a pas atteint son nombre maximum d'équipes
-        if ($tournament->getTeam()->count() >= $tournament->getNbMaxTeam()) {
+        if ($tournament->getTeams()->count() >= $tournament->getNbMaxTeam()) {
             $this->addFlash('error', 'Le nombre maximum d\'équipes pour ce tournoi a été atteint.');
             return $this->redirectToRoute('app_tournament_details', ['id' => $tournament->getId()]);
         }
