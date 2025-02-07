@@ -47,7 +47,7 @@ class ProfileController extends AbstractController
             $isRegistered = false;
             foreach ($userTeams as $team) {
                 // Si l'une des équipes de l'utilisateur est inscrite dans le tournoi
-                if ($tournament->getTeam()->contains($team)) {
+                if ($tournament->getTeams()->contains($team)) {
                     $isRegistered = true;
                     break;
                 }
