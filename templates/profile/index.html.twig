@@ -1,0 +1,53 @@
+{# templates/profile/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+<div class="profile-container">
+    <h1>Mon Profil</h1>
+    
+    <div class="profile-form">
+        {{ form_start(profileForm) }}
+            {{ form_row(profileForm.first_name) }}
+            {{ form_row(profileForm.last_name) }}
+            {{ form_row(profileForm.pseudo) }}
+            {{ form_row(profileForm.email) }}
+    </br>
+            <button type="submit" class="btn btn-primary">Mettre à jour</button>
+        {{ form_end(profileForm) }}
+    </div>
+
+    <div class="profile-tournaments">
+         <h2>Tournois auxquels je suis inscrit</h2>
+         {% if registeredTournaments is empty %}
+              <p>Vous n'êtes inscrit à aucun tournoi.</p>
+         {% else %}
+              <ul class="tournament-list">
+              {% for tournament in registeredTournaments %}
+                  <li>
+                      <strong>{{ tournament.name }}</strong> – 
+                      {{ tournament.date|date('d/m/Y') }}
+                      <a href="{{ path('app_tournament_details', {'id': tournament.id}) }}">Voir détails</a>
+                  </li>
+              {% endfor %}
+              </ul>
+         {% endif %}
+
+         <h2>Tournois auxquels j'ai participé</h2>
+         {% if participatedTournaments is empty %}
+              <p>Vous n'avez participé à aucun tournoi.</p>
+         {% else %}
+              <ul class="tournament-list">
+              {% for tournament in participatedTournaments %}
+                  <li>
+                      <strong>{{ tournament.name }}</strong> – 
+                      {{ tournament.date|date('d/m/Y') }}
+                      <a href="{{ path('app_tournament_details', {'id': tournament.id}) }}">Voir détails</a>
+                  </li>
+              {% endfor %}
+              </ul>
+         {% endif %}
+    </div>
+</div>
+{% endblock %}

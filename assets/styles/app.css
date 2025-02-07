@@ -1,0 +1,663 @@
+/* Global Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f3f4f6;
+    overflow-x: hidden;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Navbar */
+
+.navbar {
+    width: 100%;
+    background-color: #007bff;
+    padding: 1rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.navbar-container {
+    max-width: 90%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar-logo {
+    font-weight: bold;
+    text-decoration: none;
+    color: #fff;
+}
+
+.navbar-menu {
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-menu li {
+    margin-left: 1rem;
+}
+
+.navbar-menu li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.navbar-menu li a:hover {
+    color: #dcdcdc;
+}
+
+.main-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 4rem);
+    padding: 1rem;
+}
+
+/* Landing Page */
+
+.landing-container {
+    width: 90%;
+    max-width: 40rem;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.landing-logo {
+    width: 80px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.landing-title {
+    font-size: 2.2em;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.landing-text {
+    font-size: 1.2em;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.landing-actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.landing-actions a {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #007bff;
+    color: white;
+    font-size: 1em;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.landing-actions a:hover {
+    background-color: #0056b3;
+}
+
+.landing-actions a.signup {
+    background-color: #007bff;
+}
+
+.landing-actions a.signup:hover {
+    background-color: #0056b3;
+}
+
+/* Dashboard Page */
+
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+.dashboard-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-actions a {
+    padding: 0.75rem 2rem;
+    margin: 0.5rem;
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.dashboard-actions a:hover {
+    background-color: #0056b3;
+}
+
+.filter-tournaments {
+    margin-bottom: 2rem;
+}
+
+.filter-options {
+    margin-bottom: 1.5rem;
+}
+
+.filter-options button {
+    padding: 0.5rem 1.5rem;
+    margin: 0.5rem;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.filter-options button:hover,
+.filter-options button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.tournaments-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.tournament-card {
+    width: 20rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: transform 0.3s;
+}
+
+.tournament-card:hover {
+    transform: scale(1.02);
+}
+
+.tournament-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.tournament-card p {
+    font-size: 1rem;
+    color: #555;
+}
+
+.joined-status {
+    margin-top: 1rem;
+    color: #28a745;
+}
+
+.btn-details,
+.btn-join {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    text-decoration: none;
+    color: white;
+    background-color: #28a745;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-details:hover,
+.btn-join:hover {
+    background-color: #218838;
+}
+
+/* Optionnel : Marquer visuellement les tournois où l'utilisateur est inscrit */
+.participant {
+    border: 2px solid #28a745 !important;
+    background-color: #eaffea;
+}
+
+
+/* Profile Page */
+.profile-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-container h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.profile-form {
+    margin-bottom: 2rem;
+}
+
+.profile-form .form-group {
+    margin-bottom: 1rem;
+}
+
+.profile-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.profile-form input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.profile-form button {
+    padding: 0.75rem 1.5rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.profile-form button:hover {
+    background-color: #0056b3;
+}
+
+.profile-tournaments {
+    margin-top: 2rem;
+}
+
+.profile-tournaments h2 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.profile-tournaments ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.profile-tournaments li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Join Tournament Page Styles */
+.join-tournament-container {
+    max-width: 40rem;
+    width: 90%;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.join-tournament-container h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.join-tournament-container p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.tournament-details {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    font-size: 1rem;
+    color: #555;
+}
+
+.tournament-details li {
+    margin-bottom: 0.5rem;
+}
+
+.btn-join-tournament {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #28a745;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+.btn-join-tournament:hover {
+    background-color: #218838;
+}
+
+/* Team Create Page */
+
+.team-create-container {
+    max-width: 40rem;
+    width: 90%;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.team-create-container h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.team-create-container .btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.team-create-container .btn:hover {
+    background-color: #0056b3;
+}
+
+/* Tournament Details Page */
+
+.tournament-details-container {
+    max-width: 40rem;
+    width: 90%;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.tournament-details-container h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.tournament-details-container p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+}
+
+.tournament-info {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 1.5rem;
+}
+
+.tournament-info li {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #444;
+}
+
+.teams-list {
+    list-style: none;
+    padding: 0;
+}
+
+.teams-list li {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #666;
+}
+
+.btn-join-tournament {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #28a745;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+.btn-join-tournament:hover {
+    background-color: #218838;
+}
+
+/* Team List Page */
+
+.team-list-container {
+    max-width: 80%;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.team-list-container h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.filter-options {
+    margin-bottom: 1.5rem;
+}
+
+.filter-options button {
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.filter-options button:hover {
+    background-color: #0056b3;
+}
+
+.teams-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.team-card {
+    width: 20rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    background-color: #f9f9f9;
+    transition: transform 0.3s;
+}
+
+.team-card:hover {
+    transform: scale(1.02);
+}
+
+.team-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.team-card p {
+    font-size: 1rem;
+    color: #555;
+}
+
+.my-team {
+    border: 2px solid #28a745 !important;
+    /* Optionnel : ajouter un fond léger pour marquer visuellement */
+    background-color: #eaffea;
+}
+
+/* Tournament Progress Page */
+
+.tournament-progress-container {
+    text-align: center;
+    padding: 20px;
+}
+.bracket {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.match {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+.team {
+    padding: 8px;
+    margin: 5px;
+    width: 120px;
+    text-align: center;
+    background: #ddd;
+    border-radius: 5px;
+}
+.winner {
+    background: #28a745;
+    color: white;
+    font-weight: bold;
+}
+
+
+
+
+/* Formulaire */
+form {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column; /* Forcer l'alignement vertical */
+}
+
+/* Titre */
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+/* Espacement et structure des champs */
+label {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+input.form-control,
+select.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.checkbox label {
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Boutons */
+button.btn,
+button.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.btn:hover,
+button.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Message d'erreur */
+.alert.alert-danger {
+    padding: 10px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+/* Liens */
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Message pour changer de page */
+.mt-3.text-center {
+    margin-top: 15px;
+    text-align: center;
+}
+
+form .form-error {
+    color: #721c24;
+    font-size: 0.875rem;
+    margin-top: 5px;
+}

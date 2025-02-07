@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rejoindre le tournoi{% endblock %}
+
+{% block body %}
+<div class="join-tournament-container">
+    <h1>Rejoindre le tournoi : {{ tournament.name }}</h1>
+    <p>{{ tournament.description }}</p>
+    <ul class="tournament-details">
+        <li><strong>Date :</strong> {{ tournament.date|date('d/m/Y') }}</li>
+        <li>
+            <strong>Inscriptions :</strong> 
+            Du {{ tournament.startInscription|date('d/m/Y') }} au {{ tournament.endInscription|date('d/m/Y') }}
+        </li>
+        <li><strong>Nombre maximum d'équipes :</strong> {{ tournament.nbMaxTeam }}</li>
+    </ul>
+    <a href="{{ path('app_join_tournament', {'id': tournament.id}) }}" class="btn-join-tournament">
+        Rejoindre ce tournoi
+    </a>
+</div>
+{% endblock %}

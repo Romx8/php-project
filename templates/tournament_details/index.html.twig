@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du Tournoi{% endblock %}
+
+{% block body %}
+<div class="tournament-details-container">
+    <h1>{{ tournament.name }}</h1>
+    <p>{{ tournament.description }}</p>
+    <ul class="tournament-info">
+        <li><strong>Date du tournoi :</strong> {{ tournament.date|date('d/m/Y') }}</li>
+        <li>
+            <strong>Période d'inscription :</strong>
+            Du {{ tournament.startInscription|date('d/m/Y') }} au {{ tournament.endInscription|date('d/m/Y') }}
+        </li>
+        <li><strong>Prix :</strong> {{ tournament.cashprice }} €</li>
+        <li><strong>Nombre maximum d'équipes :</strong> {{ tournament.nbMaxTeam }}</li>
+        <li>
+            <strong>Statut :</strong>
+            {% if tournament.finished %}
+                Terminé
+            {% else %}
+                En cours
+            {% endif %}
+        </li>
+    </ul>
+
+    <h2>Équipes inscrites</h2>
+    {% if tournament.teams|length == 0 %}
+         <p>Aucune équipe inscrite pour le moment.</p>
+    {% else %}
+    {% if tournament.teams|length > 1 %}
+        <a href="{{ path('app_generate_matches', {'id': tournament.id}) }}" class="btn btn-primary">Générer les matchs</a>
+    {% endif %}
+
+         <ul class="teams-list">
+             {% for team in tournament.teams %}
+                 <li>{{ team.name }}</li>
+             {% endfor %}
+         </ul>
+    {% endif %}
+
+    {# Définir la date actuelle pour les comparaisons #}
+    {% set now = "now"|date("U") %}
+
+    {# Bouton "Rejoindre" : s'affiche si les inscriptions sont ouvertes, le tournoi est en cours et l'utilisateur n'est pas inscrit #}
+    {% if now >= tournament.startInscription|date("U") 
+          and now <= tournament.endInscription|date("U") 
+          and not tournament.finished 
+          and not tournament.userIsParticipant %}
+         <a href="{{ path('app_join_tournament', {'id': tournament.id}) }}" class="btn-join-tournament">Rejoindre ce tournoi</a>
+    {% endif %}
+
+    {# Bouton "Voir l'arborescence" : s'affiche si le tournoi est en cours et l'utilisateur est déjà inscrit #}
+    {% if tournament.finished == false %}
+    <a href="{{ path('app_tournament_progress', {'id': tournament.id}) }}" class="btn btn-success">
+        Voir l'avancement du tournoi
+    </a>
+{% endif %}
+
+</div>
+{% endblock %}

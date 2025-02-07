@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une équipe{% endblock %}
+
+{% block body %}
+<div class="team-create-container">
+    <h1>Créer une équipe</h1>
+    {{ form_start(teamForm) }}
+        {{ form_row(teamForm.name) }}
+        {{ form_row(teamForm.nbMaxUser) }}
+        <button type="submit" class="btn">Créer l'équipe</button>
+    {{ form_end(teamForm) }}
+</div>
+{% endblock %}

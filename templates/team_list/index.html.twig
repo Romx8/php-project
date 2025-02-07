@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des équipes{% endblock %}
+
+{% block body %}
+<div class="team-list-container">
+    <h1>Liste des équipes</h1>
+    
+    <div class="dashboard-actions">
+        <a href="{{ path('app_create_team') }}" class="btn-create-team">Créer une équipe</a>
+    </div>
+    
+    </br>
+
+    <div class="filter-options">
+         <button class="filter-btn" data-filter="all">Toutes les équipes</button>
+         <button class="filter-btn" data-filter="mine">Mes équipes</button>
+    </div>
+    
+    <div class="teams-container">
+         {% if teams is empty %}
+             <p>Aucune équipe disponible.</p>
+         {% else %}
+             {% for team in teams %}
+                  <div class="team-card {% if team in userTeams %}my-team{% endif %}">
+                       <h3>{{ team.name }}</h3>
+                       <p><strong>Nombre max d'utilisateurs :</strong> {{ team.nbMaxUser }}</p>
+                       {% if team in userTeams %}
+                           <p class="joined-status">Vous êtes dans cette équipe !</p>
+                       {% else %}
+                           <a href="{{ path('app_join_team', {'id': team.id}) }}" class="btn-join">Rejoindre</a>
+                       {% endif %}
+                  </div>
+             {% endfor %}
+         {% endif %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const teamCards = document.querySelectorAll('.team-card');
+
+    filterButtons.forEach(function(btn){
+         btn.addEventListener('click', function(){
+              // Optionnel : gérer visuellement le bouton actif
+              filterButtons.forEach(b => b.classList.remove('active'));
+              btn.classList.add('active');
+
+              const filter = btn.getAttribute('data-filter');
+              teamCards.forEach(function(card){
+                  if(filter === 'all'){
+                      card.style.display = 'block';
+                  } else if(filter === 'mine'){
+                      card.style.display = card.classList.contains('my-team') ? 'block' : 'none';
+                  }
+              });
+         });
+    });
+});
+</script>
+{% endblock %}
