@@ -36,7 +36,7 @@ composer install
 
 ### 🛠 **4. Configurer la base de données**
 
-1. **Créer un fichier **`` et modifier la ligne suivante :
+1. **Rend toi dans le fichier .env et modifier la ligne suivante** :
 
    ```
    DATABASE_URL="mysql://root:@127.0.0.1:3306/tournament_db?serverVersion=8.0"
